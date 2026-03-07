@@ -4,77 +4,195 @@ import sqlite3
 import os
 from dotenv import load_dotenv
 
-# --- PAGE CONFIGURATION ---
+# --- PAGE CONFIGURATION (must be first) ---
 st.set_page_config(page_title="AI Email Pro", page_icon="✉️", layout="wide")
 
-# --- CUSTOM CSS FOR A PREMIUM LIGHT THEME ---
+# --- CUSTOM CSS FOR THE FULL image_3.png DESIGN ---
+# This block overwrites Streamlit's default look and structure.
 custom_css = """
 <style>
-    /* Import a sleek, modern web font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-
-    /* Apply the new font to everything */
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif !important;
+    /* Import Futuristic/Tech Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap');
+    
+    /* Apply futuristic font to heading elements */
+    h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button {
+        font-family: 'Chakra Petch', sans-serif !important;
     }
 
-    /* 1. MAIN APP BACKGROUND - Clean off-white */
+    /* 1. MAIN APP BACKGROUND - Deep Dark Cosmic Blue with texture */
     .stApp {
-        background-color: #f8fafc;
-        color: #0f172a;
+        background-color: #0a0f1e;
+        background-image: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+        background-size: 30px 30px;
+        color: #f8fafc !important; /* Ensure all text is light */
     }
 
-    /* 2. SIDEBAR - Pure white with a subtle border */
+    /* 2. SIDEBAR - Dark Slate Grey with Glowing Border */
     [data-testid="stSidebar"] {
-        background-color: #ffffff;
-        border-right: 1px solid #e2e8f0;
+        background-color: #111827; 
+        border-right: 2px solid #334155;
+        box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
     }
 
-    /* Hide default Streamlit branding */
+    /* 3. CENTERED TITLE & SUBTITLE with Glowing Effect */
+    #title-container {
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    #title-container h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #38bdf8, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        /* Glowing Outline Effect */
+        -webkit-text-stroke: 1px #818cf8;
+        filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.6));
+    }
+    
+    #title-container p {
+        color: #94a3b8;
+        font-size: 1.1rem;
+        margin-top: 0;
+    }
+
+    /* Hide standard streamlit things */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    
-    /* Center the title and give it a premium blue-to-purple gradient */
-    h1 {
-        text-align: center;
-        font-weight: 800;
-        background: linear-gradient(90deg, #2563eb, #7c3aed);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
+
+    /* 4. GLOWING CARDS FOR MAIN PANELS */
+    .glowing-card {
+        background-color: #1f2937;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        transition: transform 0.3s ease;
     }
     
-    /* Clean up the input boxes */
+    /* Cyan glow card (for Details) */
+    #details-card {
+        border: 2px solid #38bdf8;
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+    #details-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Purple glow card (for Draft) */
+    #draft-card {
+        border: 2px solid #c084fc;
+        box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+    }
+    #draft-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+    }
+    
+    /* Subtitles within cards */
+    .glowing-card h2 {
+        font-size: 1.8rem;
+        color: #f8fafc !important;
+        margin-bottom: 1.5rem;
+    }
+
+    /* 5. INPUT BOXES & SELECTORS IN DARK MODE */
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: #ffffff !important;
-        color: #0f172a !important;
+        background-color: #111827 !important;
+        color: #f8fafc !important;
         border-radius: 8px !important;
-        border: 1px solid #cbd5e1 !important;
+        border: 1px solid #334155 !important;
         box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     
-    /* Blue focus ring when typing */
+    /* Glowing Focus Ring */
     .stTextArea textarea:focus, .stTextInput input:focus {
-        border-color: #2563eb !important;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3) !important;
     }
-    
-    /* Modern, solid blue button */
+
+    /* 6. GLOWING RED BUTTON WITH MODERN GRADIENT */
     .stButton>button {
-        background-color: #2563eb;
+        background-image: linear-gradient(135deg, #ef4444, #f87171);
         color: white !important;
         border: none;
         border-radius: 8px;
-        font-weight: 600;
+        font-weight: 700;
         width: 100%;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.4));
     }
     
     .stButton>button:hover {
-        background-color: #1d4ed8;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        background-image: linear-gradient(135deg, #f87171, #ef4444);
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.7));
+    }
+    
+    /* 7. REFINING TABS FOR DARK MODE */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 20px;
+        background-color: #111827;
+        border-radius: 8px;
+        padding: 5px;
+        margin-bottom: 25px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #cbd5e1 !important;
+        padding: 10px 15px;
+    }
+    /* Active Tab */
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        color: #38bdf8 !important;
+        border-bottom: 3px solid #38bdf8;
+        filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.3));
+    }
+
+    /* Styling the decorative rings (using dummy containers) */
+    .deco-card {
+        background-color: #111827;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        padding: 15px;
+        text-align: center;
+        height: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .deco-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: -5px;
+    }
+    .deco-label {
+        font-size: 0.8rem;
+        color: #94a3b8;
+    }
+    .deco-ring {
+        height: 80px; width: 80px; margin: 0 auto;
+        border-radius: 50%;
+        border: 8px solid #334155;
+        position: relative;
+    }
+    
+    #ring-context {
+        color: #38bdf8;
+        border-top-color: #38bdf8;
+        border-right-color: #38bdf8;
+        filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+    }
+    #ring-confidence {
+        color: #c084fc;
+        border-top-color: #c084fc;
+        filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.5));
     }
 </style>
 """
@@ -86,7 +204,6 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- SQLITE DATABASE FUNCTIONS ---
-# (Keep your init_db, save_to_db, and fetch_history_from_db functions exactly the same here)
 def init_db():
     conn = sqlite3.connect('email_database.db')
     cursor = conn.cursor()
@@ -121,7 +238,6 @@ def fetch_history_from_db():
 init_db()
 
 # --- AI LOGIC ---
-# (Keep your generate_email function exactly the same here)
 def generate_email(recipient, context, tone, key_points):
     system_prompt = f"""
     You are an expert executive assistant. Write a professional follow-up email.
@@ -138,31 +254,49 @@ def generate_email(recipient, context, tone, key_points):
     except Exception as e:
         return f"An error occurred: {e}"
 
+# --- UPDATED STRUCTURAL LAYOUT ---
 
-# --- STREAMLIT UI ---
-
-# We use HTML here to perfectly center the headers
+# 1. CENTERED HEADER SECTION (Locked dead-center with custom HTML)
 st.markdown("""
-    <div style='text-align: center; padding-bottom: 20px;'>
+    <div id='title-container'>
         <h1>✉️ AI Follow-Up Writer</h1>
-        <p style='color: #64748b; font-size: 1.1rem; margin-top: -10px;'>Generate professional, context-aware follow-up emails instantly.</p>
+        <p>Generate professional, context-aware follow-up emails instantly. Powered by Google Gemini.</p>
     </div>
-    <hr style='border: 1px solid #e2e8f0; margin-bottom: 30px;'>
+    <hr style='border: 1px solid #334155; margin-bottom: 40px;'>
 """, unsafe_allow_html=True)
 
-# Main Layout with Tabs
+# 2. TOP DECORATIVE ROW (To mimic the image, using dummy containers for styling)
+st.markdown("""
+    <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;'>
+        <div class='deco-card' style='position: relative;'>
+            <div class='deco-ring' id='ring-context'>
+                <div class='deco-value' style='position: absolute; top: 18px; left: 15px;'>95%</div>
+            </div>
+            <div class='deco-label'>Model Context Accuracy</div>
+        </div>
+        <div class='deco-card' style='position: relative;'>
+            <div class='deco-ring' id='ring-confidence'>
+                <div class='deco-value' style='position: absolute; top: 18px; left: 15px;'>75%</div>
+            </div>
+            <div class='deco-label'>Draft Confidence</div>
+        </div>
+        <div class='deco-card'>
+            <div class='deco-value'>22%</div>
+            <div class='deco-label'>Pothole Apps Mentioned</div>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# 3. MAIN INTERFACE ROW
+# Content is wrapped in columns and glowing cards.
 tab1, tab2 = st.tabs(["✨ Create New Draft", "🗄️ Database History"])
 
-# (Keep the rest of your tab1, tab2, and sidebar code exactly the same below this!)
-# Main Layout with Tabs
-
-
 with tab1:
-    # Use columns to split the input form and the output area
     col1, col2 = st.columns([1, 1.2], gap="large")
     
     with col1:
-        st.subheader("Email Details")
+        # Wrapping elements to apply card CSS and glowing ID
+        st.markdown("<div class='glowing-card' id='details-card'><h2>Email Details</h2>", unsafe_allow_html=True)
         st.info("Provide the context of your meeting to generate a highly tailored response.")
         
         recipient = st.text_input("Recipient's Name", placeholder="e.g., Jane Doe")
@@ -172,9 +306,12 @@ with tab1:
         
         st.write("") # Spacer
         generate_btn = st.button("Generate Email Draft", type="primary")
+        # Closing div for card container
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
-        st.subheader("Your Generated Draft")
+        # Wrapping elements in card CSS
+        st.markdown("<div class='glowing-card' id='draft-card'><h2>Your Generated Draft</h2>", unsafe_allow_html=True)
         
         if generate_btn:
             if not recipient or not context:
@@ -185,13 +322,16 @@ with tab1:
                     save_to_db(recipient, tone, draft)
                     
                     st.success("✅ Email generated and saved successfully!")
-                    st.text_area("Review and Copy:", value=draft, height=400, label_visibility="collapsed")
+                    st.text_area("Review and Copy:", value=draft, height=480, label_visibility="collapsed")
         else:
             # Placeholder when nothing is generated yet
-            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=400, disabled=True, label_visibility="collapsed")
+            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=480, disabled=True, label_visibility="collapsed")
+        
+        # Closing div for card container
+        st.markdown("</div>", unsafe_allow_html=True)
 
 with tab2:
-    st.subheader("Your Permanent Session History")
+    st.markdown("<div class='glowing-card' id='history-card'><h2>Your Permanent History</h2>", unsafe_allow_html=True)
     st.caption("All previously generated emails are securely stored in your local SQLite database.")
     
     db_history = fetch_history_from_db()
@@ -202,3 +342,6 @@ with tab2:
         for i, record in enumerate(db_history):
             with st.expander(f"✉️ To: {record['recipient']} | 🎭 Tone: {record['tone']}"):
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
+    
+    # Closing div for card container
+    st.markdown("</div>", unsafe_allow_html=True)
