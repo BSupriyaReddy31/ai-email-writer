@@ -36,12 +36,12 @@ custom_css = """
     /* 3. CENTERED TITLE & SUBTITLE with Cyan/Pink Glow */
     #title-container {
         text-align: center;
-        padding-bottom: 30px;
-        margin-top: 20px;
+        padding-bottom: 20px;
+        margin-top: 10px;
     }
 
     #title-container h1 {
-        font-size: 4rem;
+        font-size: 3.5rem;
         font-weight: 900;
         background: linear-gradient(90deg, #00f0ff, #ff007f);
         -webkit-background-clip: text;
@@ -53,7 +53,7 @@ custom_css = """
     
     #title-container p {
         color: #bfa6e8;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         margin-top: 0;
         font-weight: 300;
     }
@@ -63,13 +63,13 @@ custom_css = """
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* 4. GLOWING CARDS FOR MAIN PANELS - Translucent Purple */
+    /* 4. GLOWING CARDS FOR MAIN PANELS - Made smaller and tighter */
     .glowing-card {
         background-color: rgba(36, 15, 77, 0.85);
         backdrop-filter: blur(10px);
-        border-radius: 16px;
-        padding: 30px;
-        margin-bottom: 25px;
+        border-radius: 12px;
+        padding: 20px; /* Reduced from 30px to make boxes smaller */
+        margin-bottom: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -79,30 +79,37 @@ custom_css = """
         border: 1px solid #00f0ff;
         box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
     }
-    #details-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
-    }
 
     /* Pink glow card (for Draft) */
     #draft-card {
         border: 1px solid #ff007f;
         box-shadow: 0 0 15px rgba(255, 0, 127, 0.15);
     }
-    #draft-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
-    }
     
     /* Subtitles within cards */
     .glowing-card h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         color: #ffffff !important;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         font-weight: 700;
     }
 
-    /* 5. INPUT BOXES & SELECTORS - Deep dark interior */
+    /* 5. FIX TEXT VISIBILITY - Force labels and info boxes to be white */
+    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p {
+        color: #ffffff !important;
+        font-size: 1rem !important;
+    }
+
+    /* Fix the st.info box so the text is readable */
+    [data-testid="stNotification"] {
+        background-color: rgba(0, 240, 255, 0.1) !important;
+        border: 1px solid #00f0ff !important;
+    }
+    [data-testid="stNotification"] p {
+        color: #ffffff !important;
+    }
+
+    /* 6. INPUT BOXES & SELECTORS - Deep dark interior */
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
         background-color: rgba(17, 5, 36, 0.9) !important;
         color: #00f0ff !important; /* Cyan text when typing */
@@ -116,7 +123,7 @@ custom_css = """
         box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.3) !important;
     }
 
-    /* 6. NEON GRADIENT BUTTON */
+    /* 7. NEON GRADIENT BUTTON */
     .stButton>button {
         background-image: linear-gradient(90deg, #00f0ff, #0051ff);
         color: #ffffff !important;
@@ -125,7 +132,8 @@ custom_css = """
         font-weight: 700;
         font-size: 1.1rem;
         width: 100%;
-        padding: 10px;
+        padding: 8px;
+        margin-top: 10px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
     }
@@ -136,7 +144,7 @@ custom_css = """
         box-shadow: 0 6px 20px rgba(0, 240, 255, 0.6);
     }
     
-    /* 7. REFINING TABS FOR NEON MODE */
+    /* 8. REFINING TABS FOR NEON MODE */
     .stTabs [data-baseweb="tab-list"] {
         gap: 20px;
         background-color: rgba(36, 15, 77, 0.6);
@@ -155,51 +163,6 @@ custom_css = """
         border-bottom: 3px solid #00f0ff;
         background-color: rgba(0, 240, 255, 0.1);
         border-radius: 8px 8px 0 0;
-    }
-
-    /* Styling the decorative rings */
-    .deco-card {
-        background-color: rgba(36, 15, 77, 0.85);
-        border-radius: 16px;
-        border: 1px solid #4d298c;
-        padding: 15px;
-        text-align: center;
-        height: 130px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    
-    .deco-value {
-        font-size: 2.2rem;
-        font-weight: 900;
-        margin-bottom: -5px;
-        color: #ffffff;
-    }
-    .deco-label {
-        font-size: 0.85rem;
-        color: #bfa6e8;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-    }
-    .deco-ring {
-        height: 80px; width: 80px; margin: 0 auto;
-        border-radius: 50%;
-        border: 8px solid #2a115c;
-        position: relative;
-    }
-    
-    #ring-context {
-        color: #00f0ff;
-        border-top-color: #00f0ff;
-        border-right-color: #00f0ff;
-        filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5));
-    }
-    #ring-confidence {
-        color: #ff007f;
-        border-top-color: #ff007f;
-        filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.5));
     }
 </style>
 """
@@ -263,7 +226,7 @@ def generate_email(recipient, context, tone, key_points):
 
 # --- UPDATED STRUCTURAL LAYOUT ---
 
-# 1. CENTERED HEADER SECTION
+# 1. CENTERED HEADER SECTION (Decorative rings removed!)
 st.markdown("""
     <div id='title-container'>
         <h1>AI Follow-Up Writer</h1>
@@ -271,29 +234,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# 2. TOP DECORATIVE ROW (Neon Vibe)
-st.markdown("""
-    <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;'>
-        <div class='deco-card' style='position: relative;'>
-            <div class='deco-ring' id='ring-context'>
-                <div class='deco-value' style='position: absolute; top: 18px; left: 15px;'>95%</div>
-            </div>
-            <div class='deco-label'>Model Context Accuracy</div>
-        </div>
-        <div class='deco-card' style='position: relative;'>
-            <div class='deco-ring' id='ring-confidence'>
-                <div class='deco-value' style='position: absolute; top: 18px; left: 15px;'>75%</div>
-            </div>
-            <div class='deco-label'>Draft Confidence</div>
-        </div>
-        <div class='deco-card'>
-            <div class='deco-value' style='color: #00f0ff;'>UI/UX</div>
-            <div class='deco-label'>Optimized Interface</div>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
-# 3. MAIN INTERFACE ROW
+# 2. MAIN INTERFACE ROW
 tab1, tab2 = st.tabs(["✨ Create New Draft", "🗄️ Database History"])
 
 with tab1:
@@ -308,7 +249,6 @@ with tab1:
         context = st.text_area("What was the meeting about?", placeholder="e.g., Discussed the new frontend architecture...", height=120)
         key_points = st.text_area("Key points to include", placeholder="e.g., Attached my portfolio, excited for next steps...", height=120)
         
-        st.write("") 
         generate_btn = st.button("Generate Email Draft", type="primary")
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -324,9 +264,9 @@ with tab1:
                     save_to_db(recipient, tone, draft)
                     
                     st.success("✅ Email generated and saved successfully!")
-                    st.text_area("Review and Copy:", value=draft, height=480, label_visibility="collapsed")
+                    st.text_area("Review and Copy:", value=draft, height=450, label_visibility="collapsed")
         else:
-            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=480, disabled=True, label_visibility="collapsed")
+            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=450, disabled=True, label_visibility="collapsed")
         
         st.markdown("</div>", unsafe_allow_html=True)
 
