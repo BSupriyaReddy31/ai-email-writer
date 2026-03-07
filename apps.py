@@ -114,32 +114,41 @@ with tab1:
         key_points = st.text_area("Key points to include", height=120)
         generate_btn = st.button("Generate Email Draft")
         st.markdown("</div>", unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("<div class='glowing-card' id='draft-card'><h2>Your Generated Draft</h2>", unsafe_allow_html=True)
+with col2:
+        # Create the container for the draft
+        st.markdown("<div class='glowing-card' id='draft-card'><h2>Your Generated Draft</h2></div>", unsafe_allow_html=True)
+        
         if generate_btn:
             if not recipient or not context:
-                st.warning("⚠️ Fill out name and context.")
+                st.warning("⚠️ Please fill out the recipient name and meeting context.")
             else:
-                try:
-                    st.info("🔄 Step 1: Contacting AI...")
-                    draft = generate_email(recipient, context, tone, key_points)
-                    st.success("✅ Step 2: AI Success!")
-                    
-                    st.info("🔄 Step 3: Saving to DB...")
-                    save_to_db(recipient, tone, draft)
-                    st.success("✅ Step 4: Database Success!")
-                    
-                    st.text_area("Review and Copy:", value=draft, height=400, key="main_result")
-                except Exception as e:
-                    st.error(f"🚨 ERROR: {str(e)}")
+                # 1. Start the visual spinner
+                with st.spinner("🧠 Connecting to Gemini AI..."):
+                    try:
+                        # 2. Call the AI Logic
+                        # We use gemini-1.5-flash for better stability on the cloud
+                        prompt_text = f"Write a {tone} follow-up email to {recipient} regarding {context}. Key points: {key_points}."
+                        response = model.generate_content(prompt_text)
+                        generated_draft = response.text
+                        
+                        # 3. SUCCESS! Show the draft immediately
+                        st.success("✅ Email Generated!")
+                        st.text_area("Review and Copy:", value=generated_draft, height=450, key="final_success_display")
+                        
+                        # 4. Save to Database AFTER showing the user (so it doesn't hang the UI)
+                        save_to_db(recipient, tone, generated_draft)
+                        
+                    except Exception as e:
+                        # This will catch if the API key is wrong or if there's a network error
+                        st.error(f"🚨 API Error: {str(e)}")
+                        st.info("Check if your GEMINI_API_KEY is correctly set in Streamlit Secrets.")
         else:
-            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=400, disabled=True, key="placeholder")
-        st.markdown("</div>", unsafe_allow_html=True)
-
+            # This is the idle state before clicking the button
+            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=450, disabled=True, key="idle_display")
 with tab2:
     st.markdown("<div class='glowing-card'><h2>History</h2>", unsafe_allow_html=True)
     for record in fetch_history_from_db():
         with st.expander(f"✉️ {record['recipient']}"):
             st.write(record['draft'])
     st.markdown("</div>", unsafe_allow_html=True)
+
