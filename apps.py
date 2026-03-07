@@ -280,21 +280,35 @@ with tab1:
             st.text_area("Review and Copy:", value="Your generated email will appear here...", height=450, disabled=True, label_visibility="collapsed")
         
         st.markdown("</div>", unsafe_allow_html=True)
-
-with tab2:
-    st.markdown("<div class='glowing-card' style='border: 1px solid #4d298c;'><h2>Your Permanent History</h2>", unsafe_allow_html=True)
-    st.caption("All previously generated emails are securely stored in your local SQLite database.")
-    
-    db_history = fetch_history_from_db()
-    
-    if not db_history:
-        st.info("No emails found in the database. Head over to the 'Create New Draft' tab to generate one!")
-    else:
-        for i, record in enumerate(db_history):
-            with st.expander(f"✉️ To: {record['recipient']} | 🎭 Tone: {record['tone']}"):
-                st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
-    
-    st.markdown("</div>", unsafe_allow_html=True)
+with col2:
+        st.markdown("<div class='glowing-card' id='draft-card'><h2>Your Generated Draft</h2>", unsafe_allow_html=True)
+        
+        if generate_btn:
+            if not recipient or not context:
+                st.warning("⚠️ Please fill out the recipient name and meeting context.")
+            else:
+                # Step-by-step debugging messages
+                st.info("🔄 Step 1: Button clicked. Contacting AI...")
+                
+                try:
+                    # Try to generate the email
+                    draft = generate_email(recipient, context, tone, key_points)
+                    st.success("✅ Step 2: AI responded successfully!")
+                    
+                    st.info("🔄 Step 3: Saving to SQLite database...")
+                    # Try to save to the database
+                    save_to_db(recipient, tone, draft)
+                    st.success("✅ Step 4: Saved to database!")
+                    
+                    # Display the final result
+                    st.text_area("Review and Copy:", value=draft, height=400, label_visibility="collapsed")
+                    
+                except Exception as e:
+                    st.error(f"🚨 CRASHED: {str(e)}")
+        else:
+            st.text_area("Review and Copy:", value="Your generated email will appear here...", height=450, disabled=True, label_visibility="collapsed")
+        
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 
