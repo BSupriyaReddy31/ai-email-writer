@@ -5,26 +5,29 @@ import os
 from dotenv import load_dotenv
 
 # --- PAGE CONFIGURATION ---
-# This must be the first Streamlit command
 st.set_page_config(page_title="AI Email Pro", page_icon="✉️", layout="wide")
 
-# --- CUSTOM CSS FOR A DEVELOPER DARK THEME ---
+# --- CUSTOM CSS FOR A PREMIUM LIGHT THEME ---
 custom_css = """
 <style>
-    /* 1. MAIN APP BACKGROUND - Deep Slate (Dark Mode) */
+    /* Import a sleek, modern web font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+    /* Apply the new font to everything */
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif !important;
+    }
+
+    /* 1. MAIN APP BACKGROUND - Clean off-white */
     .stApp {
-        background-color: #0f172a; 
+        background-color: #f8fafc;
+        color: #0f172a;
     }
 
-    /* 2. SIDEBAR - Slightly lighter slate for contrast */
+    /* 2. SIDEBAR - Pure white with a subtle border */
     [data-testid="stSidebar"] {
-        background-color: #1e293b; 
-        border-right: 1px solid #334155;
-    }
-
-    /* 3. Global Text Color - Force text to be white/light gray so it's readable */
-    .stApp, .stApp p, .stApp label, .stApp h2, .stApp h3, .stApp span {
-        color: #f8fafc !important;
+        background-color: #ffffff;
+        border-right: 1px solid #e2e8f0;
     }
 
     /* Hide default Streamlit branding */
@@ -32,54 +35,46 @@ custom_css = """
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Create a striking neon-blue gradient title */
+    /* Center the title and give it a premium blue-to-purple gradient */
     h1 {
-        background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
+        text-align: center;
+        font-weight: 800;
+        background: linear-gradient(90deg, #2563eb, #7c3aed);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-weight: 800;
-        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
     }
     
-    /* Style the input areas for dark mode */
+    /* Clean up the input boxes */
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: #0f172a !important;
-        color: #f8fafc !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
         border-radius: 8px !important;
-        border: 1px solid #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     
-    /* Focus glowing effect for inputs */
+    /* Blue focus ring when typing */
     .stTextArea textarea:focus, .stTextInput input:focus {
-        border-color: #38bdf8 !important;
-        box-shadow: 0 0 8px rgba(56, 189, 248, 0.4) !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
     }
     
-    /* High-tech primary button */
+    /* Modern, solid blue button */
     .stButton>button {
-        background-image: linear-gradient(to right, #38bdf8, #818cf8);
+        background-color: #2563eb;
         color: white !important;
         border: none;
         border-radius: 8px;
-        font-weight: bold;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.2s ease;
     }
     
     .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
-    }
-    
-    /* Tabs styling for dark mode */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 24px;
-        background-color: transparent;
-    }
-    .stTabs [data-baseweb="tab"] {
-        color: #94a3b8 !important;
-    }
-    .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #38bdf8 !important;
+        background-color: #1d4ed8;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     }
 </style>
 """
@@ -91,6 +86,7 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- SQLITE DATABASE FUNCTIONS ---
+# (Keep your init_db, save_to_db, and fetch_history_from_db functions exactly the same here)
 def init_db():
     conn = sqlite3.connect('email_database.db')
     cursor = conn.cursor()
@@ -125,6 +121,7 @@ def fetch_history_from_db():
 init_db()
 
 # --- AI LOGIC ---
+# (Keep your generate_email function exactly the same here)
 def generate_email(recipient, context, tone, key_points):
     system_prompt = f"""
     You are an expert executive assistant. Write a professional follow-up email.
@@ -141,15 +138,24 @@ def generate_email(recipient, context, tone, key_points):
     except Exception as e:
         return f"An error occurred: {e}"
 
+
 # --- STREAMLIT UI ---
 
-# Header Section
-st.title("✉️ AI Follow-Up Writer")
-st.caption("Generate professional, context-aware follow-up emails instantly. Powered by Google Gemini.")
-st.divider()
+# We use HTML here to perfectly center the headers
+st.markdown("""
+    <div style='text-align: center; padding-bottom: 20px;'>
+        <h1>✉️ AI Follow-Up Writer</h1>
+        <p style='color: #64748b; font-size: 1.1rem; margin-top: -10px;'>Generate professional, context-aware follow-up emails instantly.</p>
+    </div>
+    <hr style='border: 1px solid #e2e8f0; margin-bottom: 30px;'>
+""", unsafe_allow_html=True)
 
 # Main Layout with Tabs
 tab1, tab2 = st.tabs(["✨ Create New Draft", "🗄️ Database History"])
+
+# (Keep the rest of your tab1, tab2, and sidebar code exactly the same below this!)
+# Main Layout with Tabs
+
 
 with tab1:
     # Use columns to split the input form and the output area
