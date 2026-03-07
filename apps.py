@@ -170,7 +170,18 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 # --- SETUP & CONFIGURATION ---
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Smart API Key loader: Checks Streamlit Secrets first (for Cloud), then local .env (for your computer)
+try:
+    api_key = st.secrets["GEMINI_API_KEY"]
+except (KeyError, FileNotFoundError):
+    api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    st.error("🚨 API Key not found! Please check your Streamlit Secrets or local .env file.")
+else:
+    genai.configure(api_key=api_key)
+
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- SQLITE DATABASE FUNCTIONS ---
@@ -284,6 +295,7 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
