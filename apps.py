@@ -97,7 +97,7 @@ custom_css = """
     /* 5. FIX TEXT VISIBILITY - Force labels and info boxes to be white */
     .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p {
         color: #00f0ff !important;
-        font-size: 1rem !important;
+        font-size: 1.6rem !important;
     }
 
     /* Fix the st.info box so the text is readable */
@@ -284,6 +284,7 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
