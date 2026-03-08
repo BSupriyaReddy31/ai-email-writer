@@ -96,7 +96,7 @@ custom_css = """
 
     /* 5. FIX TEXT VISIBILITY - Force labels and info boxes to be white */
     .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p {
-        color: #ffffff !important;
+        color: #00f0ff !important;
         font-size: 1rem !important;
     }
 
@@ -112,7 +112,7 @@ custom_css = """
     /* 6. INPUT BOXES & SELECTORS - Deep dark interior */
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
         background-color: rgba(17, 5, 36, 0.9) !important;
-        color: #00f0ff !important; /* Cyan text when typing */
+        color: #ffffff !important; /* Cyan text when typing */
         border-radius: 8px !important;
         border: 1px solid #4d298c !important;
     }
@@ -284,5 +284,6 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
