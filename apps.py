@@ -103,7 +103,7 @@ custom_css = """
     /* Fix the st.info box so the text is readable */
     [data-testid="stNotification"] {
         background-color: rgba(0, 240, 255, 0.1) !important;
-        border: 1px solid #00f0ff !important;
+        border: 2px solid #00f0ff !important;
     }
     [data-testid="stNotification"] p {
         color: #ffffff !important;
@@ -284,3 +284,4 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
