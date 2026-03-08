@@ -174,6 +174,7 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- SQLITE DATABASE FUNCTIONS ---
 def init_db():
+    """Creates the database and table if they don't exist yet."""
     conn = sqlite3.connect('email_database.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -188,6 +189,7 @@ def init_db():
     conn.close()
 
 def save_to_db(recipient, tone, draft):
+    """Inserts a newly generated email into the SQLite Database."""
     conn = sqlite3.connect('email_database.db')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO email_history (recipient, tone, draft) VALUES (?, ?, ?)", 
@@ -196,14 +198,20 @@ def save_to_db(recipient, tone, draft):
     conn.close()
 
 def fetch_history_from_db():
+    """Retrieves all past emails from the SQLite Database."""
     conn = sqlite3.connect('email_database.db')
+    # This setting allows us to access columns by name (like a dictionary)
     conn.row_factory = sqlite3.Row 
     cursor = conn.cursor()
+    
+    # Fetch newest emails first
     cursor.execute("SELECT recipient, tone, draft FROM email_history ORDER BY id DESC")
     records = cursor.fetchall()
     conn.close()
+    
     return records
 
+# Initialize the database when the app starts
 init_db()
 
 # --- AI LOGIC ---
@@ -283,6 +291,7 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
