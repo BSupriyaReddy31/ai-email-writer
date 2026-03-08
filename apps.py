@@ -7,33 +7,29 @@ from dotenv import load_dotenv
 # --- PAGE CONFIGURATION (must be first) ---
 st.set_page_config(page_title="AI Email Pro", page_icon="✉️", layout="wide")
 
-# --- CUSTOM CSS FOR THE NEON PURPLE/CYAN THEME ---
+# --- CUSTOM CSS FOR THE VISILY PASTEL THEME ---
 custom_css = """
 <style>
-    /* Import Modern Tech Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
+    /* Import Clean Modern SaaS Font (Inter) */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    /* Apply futuristic font to heading elements */
     html, body, [class*="css"], h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button {
-        font-family: 'Outfit', sans-serif !important;
+        font-family: 'Inter', sans-serif !important;
     }
 
-    /* 1. MAIN APP BACKGROUND - Deep Violet with Dotted Pattern */
+    /* 1. MAIN APP BACKGROUND - Soft Lilac / Pastel Purple */
     .stApp {
-        background-color: #1a0b2e;
-        background-image: radial-gradient(#4d298c 1.5px, transparent 1.5px);
-        background-size: 25px 25px;
-        color: #ffffff !important; 
+        background-color: #debafe; /* Exact match from the image */
+        color: #261c2c !important; 
     }
 
-    /* 2. SIDEBAR - Darker Purple with Neon Cyan Border */
+    /* 2. SIDEBAR - Clean White */
     [data-testid="stSidebar"] {
-        background-color: #110524; 
-        border-right: 2px solid #00f0ff;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        background-color: #ffffff; 
+        border-right: 1px solid #c8a3e8;
     }
 
-    /* 3. CENTERED TITLE & SUBTITLE with Cyan/Pink Glow */
+    /* 3. CENTERED TITLE - Dark Text */
     #title-container {
         text-align: center;
         padding-bottom: 20px;
@@ -42,20 +38,17 @@ custom_css = """
 
     #title-container h1 {
         font-size: 3.5rem;
-        font-weight: 900;
-        background: linear-gradient(90deg, #00f0ff, #ff007f);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        color: #30153e; /* Deep Violet */
         margin-bottom: 0.2rem;
-        letter-spacing: 1px;
-        filter: drop-shadow(0 0 10px rgba(255, 0, 127, 0.4));
+        letter-spacing: -1px;
     }
     
     #title-container p {
-        color: #bfa6e8;
+        color: #4a3b52;
         font-size: 1.1rem;
         margin-top: 0;
-        font-weight: 300;
+        font-weight: 400;
     }
 
     /* Hide standard streamlit things */
@@ -63,106 +56,118 @@ custom_css = """
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* 4. GLOWING CARDS FOR MAIN PANELS - Made smaller and tighter */
+    /* 4. CARDS - Clean SaaS Style */
     .glowing-card {
-        background-color: rgba(36, 15, 77, 0.85);
-        backdrop-filter: blur(10px);
         border-radius: 12px;
-        padding: 20px; /* Reduced from 30px to make boxes smaller */
+        padding: 25px; 
         margin-bottom: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 10px 30px rgba(48, 21, 62, 0.08);
+        transition: transform 0.2s ease;
     }
     
-    /* Cyan glow card (for Details) */
+    /* White card (for Details) */
     #details-card {
-        border: 1px solid #00f0ff;
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+        background-color: #ffffff;
+        border: 1px solid #f0e6fc;
     }
 
-    /* Pink glow card (for Draft) */
+    /* Deep Violet card (for Draft) - Matches the dark banner in your image */
     #draft-card {
-        border: 1px solid #ff007f;
-        box-shadow: 0 0 15px rgba(255, 0, 127, 0.15);
+        background-color: #30153e; /* Exact match from the banner */
+        border: none;
     }
     
     /* Subtitles within cards */
-    .glowing-card h2 {
+    #details-card h2 {
         font-size: 1.6rem;
-        color: #ffffff !important;
+        color: #30153e !important;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+    
+    #draft-card h2 {
+        font-size: 1.6rem;
+        color: #fcfaff !important; /* Off-white for contrast */
         margin-bottom: 1rem;
         font-weight: 700;
     }
 
-    /* 5. FIX TEXT VISIBILITY - Force labels and info boxes to be white */
-    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p {
-        color: #00f0ff !important;
-        font-size: 1rem !important;
+    /* 5. FIX TEXT VISIBILITY */
+    .stTextInput label, .stSelectbox label, .stTextArea label {
+        color: #4a3b52 !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
     }
 
-    /* Fix the st.info box so the text is readable */
+    /* Fix the st.info box */
     [data-testid="stNotification"] {
-        background-color: rgba(0, 240, 255, 0.1) !important;
-        border: 1px solid #00f0ff !important;
+        background-color: #fcfaff !important;
+        border-left: 4px solid #592eff !important;
     }
     [data-testid="stNotification"] p {
-        color: #ffffff !important;
+        color: #4a3b52 !important;
     }
 
-    /* 6. INPUT BOXES & SELECTORS - Deep dark interior */
+    /* 6. INPUT BOXES & SELECTORS - Clean White */
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: rgba(17, 5, 36, 0.9) !important;
-        color: #ffffff !important; /* Cyan text when typing */
+        background-color: #ffffff !important;
+        color: #261c2c !important; 
         border-radius: 8px !important;
-        border: 1px solid #4d298c !important;
+        border: 1px solid #d3bcf2 !important;
     }
     
-    /* Glowing Focus Ring */
+    /* Input box style specifically for the Dark Draft side */
+    #draft-card .stTextArea textarea {
+        background-color: #432257 !important;
+        color: #ffffff !important;
+        border: 1px solid #5d3578 !important;
+    }
+    
+    /* Focus Ring */
     .stTextArea textarea:focus, .stTextInput input:focus {
-        border-color: #00f0ff !important;
-        box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.3) !important;
+        border-color: #592eff !important;
+        box-shadow: 0 0 0 2px rgba(89, 46, 255, 0.2) !important;
     }
 
-    /* 7. NEON GRADIENT BUTTON */
+    /* 7. VISILY BLUE BUTTON */
     .stButton>button {
-        background-image: linear-gradient(90deg, #00f0ff, #0051ff);
+        background-color: #592eff; /* Exact match from the Visily button */
         color: #ffffff !important;
         border: none;
         border-radius: 8px;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 1.1rem;
         width: 100%;
         padding: 8px;
         margin-top: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
+        transition: all 0.2s ease;
     }
     
     .stButton>button:hover {
-        background-image: linear-gradient(90deg, #0051ff, #00f0ff);
-        transform: scale(1.02);
-        box-shadow: 0 6px 20px rgba(0, 240, 255, 0.6);
+        background-color: #4620d4;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(89, 46, 255, 0.3);
     }
     
-    /* 8. REFINING TABS FOR NEON MODE */
+    /* 8. REFINING TABS */
     .stTabs [data-baseweb="tab-list"] {
         gap: 20px;
-        background-color: rgba(36, 15, 77, 0.6);
-        border-radius: 12px;
-        padding: 5px;
+        background-color: transparent;
+        border-bottom: 1px solid #c8a3e8;
+        padding-bottom: 0;
         margin-bottom: 25px;
-        border: 1px solid #4d298c;
     }
     .stTabs [data-baseweb="tab"] {
-        color: #bfa6e8 !important;
-        padding: 10px 20px;
+        color: #4a3b52 !important;
+        padding: 10px 10px;
+        background-color: transparent;
+        border: none;
     }
     /* Active Tab */
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #00f0ff !important;
-        border-bottom: 3px solid #00f0ff;
-        background-color: rgba(0, 240, 255, 0.1);
-        border-radius: 8px 8px 0 0;
+        color: #592eff !important;
+        border-bottom: 3px solid #592eff;
+        font-weight: 600;
     }
 </style>
 """
@@ -284,6 +289,7 @@ with tab2:
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"db_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 
