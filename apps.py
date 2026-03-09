@@ -135,19 +135,25 @@ with tab1:
                 st.warning("⚠️ Please fill out the recipient name and meeting context.")
             else:
                 with st.spinner("🧠 AI is crafting your email..."):
+                    # Generate the draft
                     draft = generate_email(recipient, context, tone, key_points)
                     
-                    # 1. Update the current draft display
-                    st.session_state.current_draft = draft
-                    st.session_state.current_target_email = target_email
-                    
-                    # 2. Add to the temporary session history (inserting at the top of the list)
-                    st.session_state.email_history.insert(0, {
-                        "recipient": recipient,
-                        "tone": tone,
-                        "draft": draft
-                    })
+                    # --- NEW: SAFETY CHECK ---
+                    # If the AI fails, it returns a string starting with "An error occurred:"
+                    if draft.startswith("An error occurred:"):
+                        st.error(f"🚨 API Issue: {draft}")
+                    else:
+                        # Only save to memory IF it was a successful generation
+                        st.session_state.current_draft = draft
+                        st.session_state.current_target_email = target_email
+                        
+                        st.session_state.email_history.insert(0, {
+                            "recipient": recipient,
+                            "tone": tone,
+                            "draft": draft
+                        })
 
+        # Display the current draft if it exists
         if st.session_state.current_draft:
             st.success("✅ Email generated successfully!")
             st.text_area("Review and Copy:", value=st.session_state.current_draft, height=350, label_visibility="collapsed")
