@@ -81,14 +81,8 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 # --- SETUP & CONFIGURATION ---
 load_dotenv()
-try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-except (KeyError, FileNotFoundError):
-    api_key = os.getenv("GEMINI_API_KEY")
-
-if api_key:
-    genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-1.5-flash')
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- AI LOGIC ---
 def generate_email(recipient, context, tone, key_points):
