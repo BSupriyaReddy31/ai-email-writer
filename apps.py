@@ -8,13 +8,10 @@ from dotenv import load_dotenv
 st.set_page_config(page_title="AI Email Pro", page_icon="✉️", layout="wide")
 
 # --- SESSION STATE MEMORY (TEMPORARY STORAGE) ---
-# This holds data ONLY while the tab is open. If they close the app, it's wiped clean!
 if "current_draft" not in st.session_state:
     st.session_state.current_draft = ""
-if "current_target_email" not in st.session_state:
-    st.session_state.current_target_email = ""
 if "email_history" not in st.session_state:
-    st.session_state.email_history = [] # This replaces the SQLite database!
+    st.session_state.email_history = [] 
 
 # --- CUSTOM CSS FOR THE NEON PURPLE/CYAN THEME ---
 custom_css = """
@@ -81,7 +78,13 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 # --- SETUP & CONFIGURATION ---
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+try:
+    api_key = st.secrets["GEMINI_API_KEY"]
+except (KeyError, FileNotFoundError):
+    api_key = os.getenv("GEMINI_API_KEY")
+
+if api_key:
+    genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- AI LOGIC ---
@@ -119,7 +122,10 @@ with tab1:
         st.info("Provide the context of your meeting to generate a highly tailored response.")
         
         recipient = st.text_input("Recipient's Name", placeholder="e.g., Jane Doe")
+        
+        # This input is now live and directly controls the button!
         target_email = st.text_input("Recipient's Email Address (Optional)", placeholder="e.g., jane@company.com")
+        
         tone = st.selectbox("Tone", ["Professional", "Friendly & Casual", "Urgent", "Appreciative"])
         context = st.text_area("What was the meeting about?", placeholder="e.g., Discussed the new frontend architecture...", height=120)
         key_points = st.text_area("Key points to include", placeholder="e.g., Attached my portfolio, excited for next steps...", height=120)
@@ -135,37 +141,32 @@ with tab1:
                 st.warning("⚠️ Please fill out the recipient name and meeting context.")
             else:
                 with st.spinner("🧠 AI is crafting your email..."):
-                    # Generate the draft
                     draft = generate_email(recipient, context, tone, key_points)
                     
-                    # --- NEW: SAFETY CHECK ---
-                    # If the AI fails, it returns a string starting with "An error occurred:"
                     if draft.startswith("An error occurred:"):
                         st.error(f"🚨 API Issue: {draft}")
                     else:
-                        # Only save to memory IF it was a successful generation
                         st.session_state.current_draft = draft
-                        st.session_state.current_target_email = target_email
-                        
                         st.session_state.email_history.insert(0, {
                             "recipient": recipient,
                             "tone": tone,
                             "draft": draft
                         })
 
-        # Display the current draft if it exists
         if st.session_state.current_draft:
             st.success("✅ Email generated successfully!")
             st.text_area("Review and Copy:", value=st.session_state.current_draft, height=350, label_visibility="collapsed")
             
             st.divider()
-            if st.session_state.current_target_email:
+            
+            # --- THE FIX: We check 'target_email' directly instead of session state ---
+            if target_email:
                 safe_subject = urllib.parse.quote(f"Follow up regarding our meeting")
                 safe_body = urllib.parse.quote(st.session_state.current_draft)
-                mailto_link = f"mailto:{st.session_state.current_target_email}?subject={safe_subject}&body={safe_body}"
+                mailto_link = f"mailto:{target_email}?subject={safe_subject}&body={safe_body}"
                 st.link_button("🚀 Open in My Email App", mailto_link)
             else:
-                st.info("💡 Tip: Enter a 'Recipient Email Address' on the left to unlock the 1-click send button!")
+                st.info("💡 Tip: Enter a 'Recipient Email Address' on the left and hit Enter to unlock the 1-click send button!")
                 
         else:
             st.text_area("Review and Copy:", value="Your generated email will appear here...", height=450, disabled=True, label_visibility="collapsed")
