@@ -181,5 +181,5 @@ with tab2:
         for i, record in enumerate(st.session_state.email_history):
             with st.expander(f"✉️ To: {record['recipient']} | 🎭 Tone: {record['tone']}"):
                 formatted_draft = record['draft'].replace('\n\n', '<br><br>').replace('\n', '<br>')
-                st.markdown(f"<div style='background-color: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #d1d5db; line-height: 1.4; margin-bottom: 0px;'>{formatted_draft}</div>", unsafe_allow_html=True)    
+                st.markdown(f"<div style='background-color: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #d1d5db; line-height: 1.2; margin-bottom: 0px;'>{formatted_draft}</div>", unsafe_allow_html=True)    
     st.markdown("</div>", unsafe_allow_html=True)
