@@ -17,7 +17,6 @@ if "email_history" not in st.session_state:
 custom_css = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap');
-    
     html, body, [class*="css"], [class*="st-"], p, h1, h2, h3, h4, h5, h6, label, input, textarea, div, span, button, a {
         font-family: 'Lora', serif !important;
     }
