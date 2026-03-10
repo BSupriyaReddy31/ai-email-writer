@@ -16,9 +16,10 @@ if "email_history" not in st.session_state:
 # --- CUSTOM CSS FOR THE CLEAN/PROFESSIONAL THEME ---
 custom_css = """
 <style>
-   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     html, body, [class*="css"], h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button, .stLinkButton>a {
-        font-family: 'Poppins', sans-serif !important;
+        font-family: 'Roboto', sans-serif !important;
+    }
     }
     .stApp {
         background-color: #f8f9fa; 
