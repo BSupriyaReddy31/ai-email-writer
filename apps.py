@@ -16,13 +16,12 @@ if "email_history" not in st.session_state:
 # --- CUSTOM CSS FOR THE CLEAN/PROFESSIONAL THEME ---
 custom_css = """
 <style>
-    /* 1. NEW FONT STYLE: Inter */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
     html, body, [class*="css"], h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button, .stLinkButton>a {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Outfit', sans-serif !important;
     }
     .stApp {
-        background-color: #f4f6f8; 
+        background-color: #f8f9fa; 
         color: #1f2937 !important; 
     }
     [data-testid="stSidebar"] {
@@ -30,55 +29,45 @@ custom_css = """
     }
     #title-container { text-align: center; padding-bottom: 20px; margin-top: 10px; }
     #title-container h1 {
-        font-size: 3.2rem; font-weight: 700; color: #111827;
+        font-size: 3.5rem; font-weight: 800; color: #111827;
         margin-bottom: 0.2rem; letter-spacing: -0.5px;
     }
-    #title-container p { color: #4b5563; font-size: 1.1rem; margin-top: 0; font-weight: 400; }
+    #title-container p { color: #6b7280; font-size: 1.1rem; margin-top: 0; font-weight: 400; }
     #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}
 
     .glowing-card {
         background-color: #ffffff;
         border-radius: 12px; padding: 25px; margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;
     }
-    .glowing-card h2 { font-size: 1.5rem; color: #111827 !important; margin-bottom: 1rem; font-weight: 600; }
+    .glowing-card h2 { font-size: 1.6rem; color: #111827 !important; margin-bottom: 1rem; font-weight: 700; }
 
-    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #374151 !important; font-size: 0.95rem !important; font-weight: 500; }
+    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #374151 !important; font-size: 1rem !important; font-weight: 500; }
     [data-testid="stNotification"] { background-color: #eff6ff !important; border: 1px solid #bfdbfe !important; }
     [data-testid="stNotification"] p { color: #1e40af !important; }
 
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: #ffffff !important; color: #1f2937 !important; 
+        background-color: #f9fafb !important; color: #1f2937 !important; 
         border-radius: 8px !important; border: 1px solid #d1d5db !important;
-        box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
     }
-    .stTextArea textarea:focus, .stTextInput input:focus { border-color: #0056b3 !important; box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2) !important; }
+    .stTextArea textarea:focus, .stTextInput input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important; }
 
-    /* 2. BUTTON VISIBILITY: Strong Blue with stark White text */
     .stButton>button, .stLinkButton>a {
-        background-color: #0056b3 !important; /* Strong Corporate Blue */
-        color: #ffffff !important; /* Pure White Text */
-        border: none;
-        border-radius: 8px; font-weight: 600; font-size: 1.05rem; width: 100%; padding: 12px; margin-top: 10px;
+        background-color: #2563eb; color: #ffffff !important; border: none;
+        border-radius: 8px; font-weight: 600; font-size: 1.1rem; width: 100%; padding: 10px; margin-top: 10px;
         transition: all 0.2s ease; text-align: center; text-decoration: none;
     }
     .stButton>button:hover, .stLinkButton>a:hover {
-        background-color: #004494 !important; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0, 86, 179, 0.2);
+        background-color: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
     }
     
-    /* 3. TABS / MOVABLE LINES: Clean bottom borders */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 20px; background-color: transparent; padding: 0;
-        margin-bottom: 20px; border-bottom: 2px solid #e5e7eb;
+        gap: 20px; background-color: #ffffff; border-radius: 12px; padding: 5px;
+        margin-bottom: 25px; border: 1px solid #e5e7eb;
     }
-    .stTabs [data-baseweb="tab"] { color: #6b7280 !important; padding: 10px 15px; font-weight: 500; background: transparent; border: none; }
-    
-    /* The active movable line */
+    .stTabs [data-baseweb="tab"] { color: #6b7280 !important; padding: 10px 20px; font-weight: 500; }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #0056b3 !important; 
-        border-bottom: 4px solid #0056b3 !important; /* Matches the button color perfectly */
-        background-color: transparent; 
-        border-radius: 0;
+        color: #2563eb !important; border-bottom: 3px solid #2563eb; background-color: #eff6ff; border-radius: 8px 8px 0 0;
     }
 </style>
 """
@@ -133,6 +122,7 @@ with tab1:
         
         target_email = st.text_input("Recipient's Email Address (Optional)", placeholder="e.g., jane@company.com")
         
+        # --- THE FIX: Expanded list of tones ---
         tone = st.selectbox("Tone", [
             "Professional", 
             "Friendly & Casual", 
