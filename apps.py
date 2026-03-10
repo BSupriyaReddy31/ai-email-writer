@@ -13,6 +13,65 @@ if "current_draft" not in st.session_state:
 if "email_history" not in st.session_state:
     st.session_state.email_history = [] 
 
+# --- CUSTOM CSS FOR THE CLEAN/PROFESSIONAL THEME ---
+custom_css = """
+<style>
+   @import url('https://fonts.googleapis.com/css2?family=Lora:wght@300;500;700;900&display=swap');
+    html, body, [class*="css"], h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button, .stLinkButton>a {
+        font-family: 'Lora', sans-serif !important;
+    }
+    .stApp {
+        background-color: #f8f9fa; 
+        color: #1f2937 !important; 
+    }
+    [data-testid="stSidebar"] {
+        background-color: #ffffff; border-right: 1px solid #e5e7eb;
+    }
+    #title-container { text-align: center; padding-bottom: 20px; margin-top: 10px; }
+    #title-container h1 {
+        font-size: 3.5rem; font-weight: 800; color: #111827;
+        margin-bottom: 0.2rem; letter-spacing: -0.5px;
+    }
+    #title-container p { color: #6b7280; font-size: 1.1rem; margin-top: 0; font-weight: 400; }
+    #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}
+
+    .glowing-card {
+        background-color: #ffffff;
+        border-radius: 12px; padding: 25px; margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;
+    }
+    .glowing-card h2 { font-size: 1.6rem; color: #111827 !important; margin-bottom: 1rem; font-weight: 700; }
+
+    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #111827 !important; font-size: 1.05rem !important; font-weight: 500; }
+    [data-testid="stNotification"] { background-color: #eff6ff !important; border: 1px solid #bfdbfe !important; }
+    [data-testid="stNotification"] p { color: #1e40af !important; }
+
+    .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
+        background-color: #f9fafb !important; color: #1f2937 !important; 
+        border-radius: 8px !important; border: 1px solid #d1d5db !important;
+    }
+    .stTextArea textarea:focus, .stTextInput input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important; }
+
+    .stButton>button, .stLinkButton>a {
+        background-color: #e2edfb; color: #ffffff !important; border: none;
+        border-radius: 8px; font-weight: 600; font-size: 1.1rem; width: 100%; padding: 10px; margin-top: 10px;
+        transition: all 0.2s ease; text-align: center; text-decoration: none;
+    }
+    .stButton>button:hover, .stLinkButton>a:hover {
+        background-color: #ADD8E6; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+    
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 20px; background-color: #ffffff; border-radius: 12px; padding: 5px;
+        margin-bottom: 25px; border: 1px solid #e5e7eb;
+    }
+    .stTabs [data-baseweb="tab"] { color: #6b7280 !important; padding: 10px 20px; font-weight: 500; }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        color: #2563eb !important; border-bottom: 3px solid #2563eb; background-color: #eff6ff; border-radius: 8px 8px 0 0;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
 
 
 # --- SETUP & CONFIGURATION ---
