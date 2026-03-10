@@ -58,7 +58,7 @@ custom_css = """
         transition: all 0.2s ease; text-align: center; text-decoration: none;
     }
     .stButton>button:hover, .stLinkButton>a:hover {
-        background-color: #0056b3; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        background-color: #ADD8E6; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
     }
     
     .stTabs [data-baseweb="tab-list"] {
