@@ -53,7 +53,7 @@ custom_css = """
     .stTextArea textarea:focus, .stTextInput input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important; }
 
     .stButton>button, .stLinkButton>a {
-        background-color: #2563eb; color: #ffffff !important; border: none;
+        background-color: #e2edfb; color: #ffffff !important; border: none;
         border-radius: 8px; font-weight: 600; font-size: 1.1rem; width: 100%; padding: 10px; margin-top: 10px;
         transition: all 0.2s ease; text-align: center; text-decoration: none;
     }
