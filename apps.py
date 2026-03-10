@@ -124,7 +124,7 @@ with tab1:
         # This input is now live and directly controls the button!
         target_email = st.text_input("Recipient's Email Address (Optional)", placeholder="e.g., jane@company.com")
         
-        tone = st.selectbox("Tone", ["Professional", "Friendly & Casual", "Urgent", "Appreciative"])
+        tone = st.selectbox("Tone", ["Professional", "Friendly & Casual", "Urgent", "Appreciative",  "Persuasive", "Apologetic", "Formal", "Empathetic", "Direct & Concise", "Enthusiastic"])
         context = st.text_area("What was the meeting about?", placeholder="e.g., Discussed the new frontend architecture...", height=120)
         key_points = st.text_area("Key points to include", placeholder="e.g., Attached my portfolio, excited for next steps...", height=120)
         
