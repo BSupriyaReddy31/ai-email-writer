@@ -42,7 +42,7 @@ custom_css = """
     }
     .glowing-card h2 { font-size: 1.6rem; color: #111827 !important; margin-bottom: 1rem; font-weight: 700; }
 
-    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #111827 !important; font-size: 1rem !important; font-weight: 500; }
+    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #111827 !important; font-size: 1.25rem !important; font-weight: 500; }
     [data-testid="stNotification"] { background-color: #eff6ff !important; border: 1px solid #bfdbfe !important; }
     [data-testid="stNotification"] p { color: #1e40af !important; }
 
