@@ -189,7 +189,7 @@ with tab2:
         st.info("No emails generated yet. Head over to the 'Create New Draft' tab to generate one!")
     else:
         for i, record in enumerate(st.session_state.email_history):
-            with st.expander(f" ✉️ To: {record['recipient']} | 🎭 Tone: {record['tone']}"):
+            with st.expander():
                 st.text_area(label="Draft", value=record['draft'], height=250, key=f"session_hist_{i}", label_visibility="collapsed")
     
     st.markdown("</div>", unsafe_allow_html=True)
