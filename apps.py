@@ -13,61 +13,64 @@ if "current_draft" not in st.session_state:
 if "email_history" not in st.session_state:
     st.session_state.email_history = [] 
 
-# --- CUSTOM CSS FOR THE CLEAN/PROFESSIONAL THEME ---
+# --- CUSTOM CSS FOR THE NEON PURPLE/CYAN THEME ---
 custom_css = """
 <style>
-   @import url('https://fonts.googleapis.com/css2?family=Lora:wght@300;500;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
     html, body, [class*="css"], h1, h2, h3, .stApp label, .stTabs [data-baseweb="tab"], .stButton>button, .stLinkButton>a {
-        font-family: 'Lora', sans-serif !important;
+        font-family: 'Outfit', sans-serif !important;
     }
     .stApp {
-        background-color: #f8f9fa; 
-        color: #1f2937 !important; 
+        background-color: #1a0b2e; background-image: radial-gradient(#4d298c 1.5px, transparent 1.5px);
+        background-size: 25px 25px; color: #ffffff !important; 
     }
     [data-testid="stSidebar"] {
-        background-color: #ffffff; border-right: 1px solid #e5e7eb;
+        background-color: #110524; border-right: 2px solid #00f0ff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
     }
     #title-container { text-align: center; padding-bottom: 20px; margin-top: 10px; }
     #title-container h1 {
-        font-size: 3.5rem; font-weight: 800; color: #111827;
-        margin-bottom: 0.2rem; letter-spacing: -0.5px;
+        font-size: 3.5rem; font-weight: 900; background: linear-gradient(90deg, #00f0ff, #ff007f);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        margin-bottom: 0.2rem; letter-spacing: 1px; filter: drop-shadow(0 0 10px rgba(255, 0, 127, 0.4));
     }
-    #title-container p { color: #6b7280; font-size: 1.1rem; margin-top: 0; font-weight: 400; }
+    #title-container p { color: #bfa6e8; font-size: 1.1rem; margin-top: 0; font-weight: 300; }
     #MainMenu {visibility: hidden;} footer {visibility: hidden;} header {visibility: hidden;}
 
     .glowing-card {
-        background-color: #ffffff;
-        border-radius: 12px; padding: 25px; margin-bottom: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;
+        background-color: rgba(36, 15, 77, 0.85); backdrop-filter: blur(10px);
+        border-radius: 12px; padding: 20px; margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .glowing-card h2 { font-size: 1.6rem; color: #111827 !important; margin-bottom: 1rem; font-weight: 700; }
+    #details-card { border: 1px solid #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.15); }
+    #draft-card { border: 1px solid #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.15); }
+    .glowing-card h2 { font-size: 1.6rem; color: #ffffff !important; margin-bottom: 1rem; font-weight: 700; }
 
-    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #111827 !important; font-size: 1.05rem !important; font-weight: 500; }
-    [data-testid="stNotification"] { background-color: #eff6ff !important; border: 1px solid #bfdbfe !important; }
-    [data-testid="stNotification"] p { color: #1e40af !important; }
+    .stTextInput label, .stSelectbox label, .stTextArea label, .stApp p { color: #00f0ff !important; font-size: 1rem !important; }
+    [data-testid="stNotification"] { background-color: rgba(0, 240, 255, 0.1) !important; border: 1px solid #00f0ff !important; }
+    [data-testid="stNotification"] p { color: #ffffff !important; }
 
     .stTextArea textarea, .stTextInput input, .stSelectbox div[data-baseweb="select"] {
-        background-color: #f9fafb !important; color: #1f2937 !important; 
-        border-radius: 8px !important; border: 1px solid #d1d5db !important;
+        background-color: rgba(17, 5, 36, 0.9) !important; color: #ffffff !important; 
+        border-radius: 8px !important; border: 1px solid #4d298c !important;
     }
-    .stTextArea textarea:focus, .stTextInput input:focus { border-color: #2563eb !important; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important; }
+    .stTextArea textarea:focus, .stTextInput input:focus { border-color: #00f0ff !important; box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.3) !important; }
 
     .stButton>button, .stLinkButton>a {
-        background-color: #e2edfb; color: #ffffff !important; border: none;
-        border-radius: 8px; font-weight: 600; font-size: 1.1rem; width: 100%; padding: 10px; margin-top: 10px;
-        transition: all 0.2s ease; text-align: center; text-decoration: none;
+        background-image: linear-gradient(90deg, #00f0ff, #0051ff); color: #ffffff !important; border: none;
+        border-radius: 8px; font-weight: 700; font-size: 1.1rem; width: 100%; padding: 8px; margin-top: 10px;
+        transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4); text-align: center; text-decoration: none;
     }
     .stButton>button:hover, .stLinkButton>a:hover {
-        background-color: #ADD8E6; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        background-image: linear-gradient(90deg, #0051ff, #00f0ff); transform: scale(1.02); box-shadow: 0 6px 20px rgba(0, 240, 255, 0.6);
     }
     
     .stTabs [data-baseweb="tab-list"] {
-        gap: 20px; background-color: #ffffff; border-radius: 12px; padding: 5px;
-        margin-bottom: 25px; border: 1px solid #e5e7eb;
+        gap: 20px; background-color: rgba(36, 15, 77, 0.6); border-radius: 12px; padding: 5px;
+        margin-bottom: 25px; border: 1px solid #4d298c;
     }
-    .stTabs [data-baseweb="tab"] { color: #6b7280 !important; padding: 10px 20px; font-weight: 500; }
+    .stTabs [data-baseweb="tab"] { color: #bfa6e8 !important; padding: 10px 20px; }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #2563eb !important; border-bottom: 3px solid #2563eb; background-color: #eff6ff; border-radius: 8px 8px 0 0;
+        color: #00f0ff !important; border-bottom: 3px solid #00f0ff; background-color: rgba(0, 240, 255, 0.1); border-radius: 8px 8px 0 0;
     }
 </style>
 """
@@ -120,22 +123,10 @@ with tab1:
         
         recipient = st.text_input("Recipient's Name", placeholder="e.g., Jane Doe")
         
+        # This input is now live and directly controls the button!
         target_email = st.text_input("Recipient's Email Address (Optional)", placeholder="e.g., jane@company.com")
         
-        # --- THE FIX: Expanded list of tones ---
-        tone = st.selectbox("Tone", [
-            "Professional", 
-            "Friendly & Casual", 
-            "Urgent", 
-            "Appreciative", 
-            "Persuasive", 
-            "Apologetic", 
-            "Formal", 
-            "Empathetic", 
-            "Direct & Concise", 
-            "Enthusiastic"
-        ])
-        
+        tone = st.selectbox("Tone", ["Professional", "Friendly & Casual", "Urgent", "Appreciative"])
         context = st.text_area("What was the meeting about?", placeholder="e.g., Discussed the new frontend architecture...", height=120)
         key_points = st.text_area("Key points to include", placeholder="e.g., Attached my portfolio, excited for next steps...", height=120)
         
@@ -168,6 +159,7 @@ with tab1:
             
             st.divider()
             
+            # --- THE FIX: We check 'target_email' directly instead of session state ---
             if target_email:
                 safe_subject = urllib.parse.quote(f"Follow up regarding our meeting")
                 safe_body = urllib.parse.quote(st.session_state.current_draft)
@@ -182,7 +174,7 @@ with tab1:
         st.markdown("</div>", unsafe_allow_html=True)
 
 with tab2:
-    st.markdown("<div class='glowing-card' style='border: 1px solid #e5e7eb;'><h2>Current Session History</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='glowing-card' style='border: 1px solid #4d298c;'><h2>Current Session History</h2>", unsafe_allow_html=True)
     st.caption("These emails are saved temporarily. They will be securely erased when you close this window.")
     
     if not st.session_state.email_history:
